@@ -1,4 +1,5 @@
 library(rvest)
+library(magrittr)
 
 Download <- function(x){
   read_html(x) %>% {
@@ -33,6 +34,10 @@ Download <- function(x){
     as.data.frame()
 }
 
+
+# =========================================================================================
+# download "文章点击排行所有"
+
 Aisixiang <- Download("http://www.aisixiang.com/toplist/index.php?id=1&period=all&page=1")
 
 Url <- paste0("http://www.aisixiang.com/toplist/index.php?id=1&period=all&page=", 2:4965)
@@ -42,3 +47,20 @@ for(i in Url){
 }
 
 write.csv(Aisixiang, "aisixiang_2016-12-27.csv", row.names = F)
+
+# ========================================================================================
+# update article "文章点击排行一月", at lease once a month
+
+Update <- Download("http://www.aisixiang.com/toplist/index.php?id=1&period=30&page=1")
+
+Url <- paste0("http://www.aisixiang.com/toplist/index.php?id=1&period=30&page=", 2:13)
+for(i in Url){
+  Update <- rbind(Update, Download(i))
+  print(i)
+}
+
+Aisixiang <- read_csv("aisixiang_2016-12-27.csv")
+Aisixiang_new <- rbind(Aisixiang, Update)
+Aisixiang_new <- unique(Aisixiang_new)
+
+write.csv(Aisixiang_new, "aisixiang_2017-01-20.csv", row.names = F)
