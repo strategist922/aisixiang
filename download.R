@@ -2,23 +2,24 @@ library(readr)
 library(rvest)
 library(magrittr)
 
-D <-read_csv("aisixiang_2017-01-20.csv")
-head(D)
+D0 <-read_csv("aisixiang_2017-01-20.csv")
+head(D0)
 
+
+Available <- vector()
+
+j <- 1
+
+D <- D0[j:nrow(D0), ]
 Get_txt <- function(x){
   read_html(x, encoding = "gb18030") %>%
     html_nodes("div#content2 p") %>%
     html_text()
 }
 
-Available <- vector()
-j <- 1
-
 for(i in D[["Title_url"]]){
   Url1 <- i %<>% paste0("http://www.aisixiang.com", .)
-  
-  # print(Url1)
-  
+
   Page <- read_html(Url1, encoding = "gb18030") %>%
     html_nodes("div.list_page a") %>%
     html_text()
@@ -28,7 +29,6 @@ for(i in D[["Title_url"]]){
   if(length(Page) > 0){
     Begin <- substr(Url1, 1, nchar(Url1)-5)
     U2 <- paste0(Begin,"-", 1:Page, ".html")
-    # print(U2)
     
     Article <- as.character()
    
@@ -52,5 +52,7 @@ for(i in D[["Title_url"]]){
   
   write.table(Article, Title, quote = F, row.names = F, col.names = F)
 
-  Sys.sleep(3)
+  Sys.sleep(1)
 }
+
+write.csv(Available, "Available.csv", row.names = F, col.names = F)
