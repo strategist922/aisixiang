@@ -4,33 +4,53 @@ library(magrittr)
 
 D <-read_csv("aisixiang_2017-01-20.csv")
 head(D)
-Dtest <- D[1,]
-Dtest[2] %<>% paste0("http://www.aisixiang.com", .)
 
+Get_txt <- function(x){
+  read_html(x, encoding = "gb18030") %>%
+    html_nodes("div#content2 p") %>%
+    html_text()
+}
 
-Download_txt <- function(x){
-  Page <- read_html(x) %>%
+Available <- vector()
+j <- 1
+
+for(i in D[["Title_url"]]){
+  Url1 <- i %<>% paste0("http://www.aisixiang.com", .)
+  
+  # print(Url1)
+  
+  Page <- read_html(Url1, encoding = "gb18030") %>%
     html_nodes("div.list_page a") %>%
     html_text()
   Page <- Page[length(Page) - 1] %>%
     as.numeric()
   
-  Begin <- substr(x, 1, nchar(x)-5)
-  
-  U2 <- paste0(Begin,"-", 1:Page, ".html")
-  
-  Main <- as.character()
-  for(i in U2){
-    One <- read_html(i) %>%
-      html_nodes("div#content2 p") %>%
-      html_text()
-    Main <- c(Main, One)
+  if(length(Page) > 0){
+    Begin <- substr(Url1, 1, nchar(Url1)-5)
+    U2 <- paste0(Begin,"-", 1:Page, ".html")
+    # print(U2)
+    
+    Article <- as.character()
+   
+    for(i in U2){
+      One <- try(Get_txt(i), silent = F)
+      Article <- c(Article, One)
+    }
+  }else{
+    Article <- Get_txt(Url1)
   }
-  Main
+  
+  Available[j] <- Av <- ifelse(length(Article) > 0, 1, 0)
+  
+  Title <- D[["Title"]][j] %>%
+    paste0(Av, "-", ., ".txt")
+  
+  print(j)
+  j <- j + 1
+  
+  print(Title)
+  
+  write.table(Article, Title, quote = F, row.names = F, col.names = F)
+
+  Sys.sleep(3)
 }
-
-mm <- Download_txt(U1)
-x <- "http://www.aisixiang.com/data/102861.html"
-
-
-write.table(mm, "test.txt", quote = F, row.names = F, col.names = F)
