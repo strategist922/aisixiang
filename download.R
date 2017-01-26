@@ -5,17 +5,19 @@ library(magrittr)
 D0 <-read_csv("aisixiang_2017-01-20.csv")
 head(D0)
 
-
-Available <- vector()
-
-j <- 1
-
-D <- D0[j:nrow(D0), ]
 Get_txt <- function(x){
   read_html(x, encoding = "gb18030") %>%
     html_nodes("div#content2 p") %>%
     html_text()
 }
+
+Available <- vector()
+
+# 615
+
+j <- 616
+
+D <- D0[j:nrow(D0), ]
 
 for(i in D[["Title_url"]]){
   Url1 <- i %<>% paste0("http://www.aisixiang.com", .)
@@ -43,7 +45,7 @@ for(i in D[["Title_url"]]){
   Available[j] <- Av <- ifelse(length(Article) > 0, 1, 0)
   
   Title <- D[["Title"]][j] %>%
-    paste0(Av, "-", ., ".txt")
+    paste0(Av, "-", j, "-", ., ".txt")
   
   print(j)
   j <- j + 1
