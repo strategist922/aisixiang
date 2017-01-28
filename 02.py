@@ -7,14 +7,16 @@ import pandas
 import time
 
 
-DD0 = pandas.read_csv("aisixiang_2017-01-20.csv")
-j = 0
+D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-DD = DD0[j:]
-print(DD.columns)
-print(DD['Title_url'])
+# 不可用文章编号：83, 87
+j = 87
+
+D = D0[j:]
+print(D.columns)
+print(D['Title_url'])
 try:
-    for i in DD['Title_url']:
+    for i in D['Title_url']:
 
         Url = "http://www.aisixiang.com" + i
         print(Url)
@@ -22,6 +24,8 @@ try:
         Soup = BeautifulSoup(html, "html.parser")
         Article = Soup.find(id = "content2")
         Article_page = ''
+
+        Availability = 2
 
         if type(Article) == type(None):
             global Availability
@@ -44,16 +48,20 @@ try:
                     Article = Soup2.find(id = "content2")
                     Article_page = Article_page + Article.get_text()
 
-        Name = str(Availability) + '-' + str(j+1) + '-' + DD0.iloc[j,0] + '.txt'
+        Name = str(Availability) + '-' + str(j+1) + '-' + D0.iloc[j,0] + '.txt'
         f = open(Name, 'w')
         f.write(Article_page)
         f.close()
         print(Name)
-        j = j+1
+        j += 1
         time.sleep(2)
 
         f2 = open("Av.txt", 'a')
-        f2.write(str(Availability))
+        f2.write(str(Availability) + '_' + str(j) + ',' + '\n')
         f2.close
 except:
+    f3 = open("broken.txt", 'a')
+    f3.write(str(j) + ',' + '\n')
+    f3.close
+    j += 1
     print("fuck")
