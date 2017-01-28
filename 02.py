@@ -8,7 +8,6 @@ import time
 
 
 DD0 = pandas.read_csv("aisixiang_2017-01-20.csv")
-DD0.columns
 j = 0
 
 DD = DD0[j:]
