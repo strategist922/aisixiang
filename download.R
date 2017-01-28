@@ -11,16 +11,20 @@ Get_txt <- function(x){
     html_text()
 }
 
-Available <- vector()
+Available <- read_csv("Available8049.csv")
+Available <- c(Available[[1]], rep(NA, nrow(D0)- length(Available[[1]])))
 
-# 615
+# 615\1598\1689\2167\2762\3181\3236\3481\3507\3722\3978, 4123, 4278, 4627, 5499,
+# 5760, 5921,5937,6087, 6128, 6150 ,6151, 6204, 6658,7253, 7450,7702,7790, 8050, 8338,
+# 9615, 9646
 
-j <- 616
+j <- 9647
 
 D <- D0[j:nrow(D0), ]
 
 for(i in D[["Title_url"]]){
   Url1 <- i %<>% paste0("http://www.aisixiang.com", .)
+  print(Url1)
 
   Page <- read_html(Url1, encoding = "gb18030") %>%
     html_nodes("div.list_page a") %>%
@@ -44,7 +48,7 @@ for(i in D[["Title_url"]]){
   
   Available[j] <- Av <- ifelse(length(Article) > 0, 1, 0)
   
-  Title <- D[["Title"]][j] %>%
+  Title <- D0[["Title"]][j] %>%
     paste0(Av, "-", j, "-", ., ".txt")
   
   print(j)
@@ -57,4 +61,5 @@ for(i in D[["Title_url"]]){
   Sys.sleep(1)
 }
 
-write.csv(Available, "Available.csv", row.names = F, col.names = F)
+write.csv(Available, "Available9645.csv", row.names = F)
+table(Available)
