@@ -39,10 +39,6 @@ try:
             else:
                 Page_number = Page.find_all("a")
                 N = int(Page_number[-2].get_text())
-                if N > 10:
-                        N = 10
-                        global Availability
-                        Availability = 2
                 for i in range(1, N+1):
                     Url2 = Url[:(len(Url)-5)] + '-' + str(i) + '.html'
                     print(Url2)
@@ -50,7 +46,7 @@ try:
                     Soup2 = BeautifulSoup(html2, "html.parser")
                     Article = Soup2.find(id = "content2")
                     Article_page = Article_page + Article.get_text()
-
+                    time.sleep(1)
         Name = str(Availability) + '-' + str(j+1) + '-' + D0.iloc[j,0] + '.txt'
         f = open(Name, 'w')
         f.write(Article_page)
