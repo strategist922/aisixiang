@@ -9,8 +9,7 @@ import time
 
 D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-# 不可用文章编号：83, 87
-j = 87
+j = 0
 
 D = D0[j:]
 print(D.columns)
@@ -25,7 +24,7 @@ try:
         Article = Soup.find(id = "content2")
         Article_page = ''
 
-        Availability = 2
+        Availability = 3
 
         if type(Article) == type(None):
             global Availability
@@ -40,6 +39,10 @@ try:
             else:
                 Page_number = Page.find_all("a")
                 N = int(Page_number[-2].get_text())
+                if N > 10:
+                        N = 10
+                        global Availability
+                        Availability = 2
                 for i in range(1, N+1):
                     Url2 = Url[:(len(Url)-5)] + '-' + str(i) + '.html'
                     print(Url2)
@@ -54,7 +57,7 @@ try:
         f.close()
         print(Name)
         j += 1
-        time.sleep(2)
+        time.sleep(1)
 
         f2 = open("Av.txt", 'a')
         f2.write(str(Availability) + '_' + str(j) + ',' + '\n')
