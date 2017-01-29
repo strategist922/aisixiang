@@ -51,7 +51,7 @@ try:
         f = open(Name, 'w')
         f.write(Article_page)
         f.close()
-        print(Name)
+        print(Name + '\n')
         j += 1
         time.sleep(1)
 
