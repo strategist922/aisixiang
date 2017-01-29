@@ -1,3 +1,5 @@
+# 由于 rvest 包用到的 xml2 包有暂时无解的 bug，此功能已经用 python 重写，本段代码已废弃。
+
 library(readr)
 library(rvest)
 library(magrittr)
@@ -11,14 +13,14 @@ Get_txt <- function(x){
     html_text()
 }
 
-Available <- read_csv("Available8049.csv")
+Available <- read_csv("Available9645.csv")
 Available <- c(Available[[1]], rep(NA, nrow(D0)- length(Available[[1]])))
 
 # 615\1598\1689\2167\2762\3181\3236\3481\3507\3722\3978, 4123, 4278, 4627, 5499,
 # 5760, 5921,5937,6087, 6128, 6150 ,6151, 6204, 6658,7253, 7450,7702,7790, 8050, 8338,
-# 9615, 9646
+# 9615, 9646, 9702,9890,9918,9962,10095,10309,10512,10522,10877
 
-j <- 9647
+j <-10523
 
 D <- D0[j:nrow(D0), ]
 
@@ -61,5 +63,5 @@ for(i in D[["Title_url"]]){
   Sys.sleep(1)
 }
 
-write.csv(Available, "Available9645.csv", row.names = F)
+write.csv(Available, "Available10876.csv", row.names = F)
 table(Available)
