@@ -9,7 +9,7 @@ import time
 
 D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-j = 0
+j = 3479
 
 D = D0[j:]
 print(D.columns)
@@ -22,7 +22,7 @@ for i in D['Title_url']:
         html = urlopen(Url)
     except:
         ft = open("broken-new.txt", 'a')
-        Broken = str(j) + '-' + Url + ',' + '\n'
+        Broken = str(j + 1) + '-' + Url + ',' + '\n'
         ft.write(Broken)
         ft.close
         print(Broken)
