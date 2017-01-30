@@ -14,14 +14,23 @@ j = 0
 D = D0[j:]
 print(D.columns)
 print(D['Title_url'])
-try:
-    for i in D['Title_url']:
 
-        Url = "http://www.aisixiang.com" + i
-        print(Url)
+for i in D['Title_url']:
+    Url = "http://www.aisixiang.com" + i
+    print(Url)
+    try:
         html = urlopen(Url)
+    except:
+        ft = open("broken-new.txt", 'a')
+        Broken = str(j) + '-' + Url + ',' + '\n'
+        ft.write(Broken)
+        ft.close
+        print(Broken)
+        j += 1
+    else:
         Soup = BeautifulSoup(html, "html.parser")
         Article = Soup.find(id = "content2")
+
         Article_page = ''
 
         Availability = 3
@@ -58,9 +67,3 @@ try:
         f2 = open("Av.txt", 'a')
         f2.write(str(Availability) + '_' + str(j) + ',' + '\n')
         f2.close
-except:
-    f3 = open("broken.txt", 'a')
-    f3.write(str(j) + ',' + '\n')
-    f3.close
-    j += 1
-    print("fuck")
