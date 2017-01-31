@@ -9,7 +9,7 @@ import time
 
 D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-j = 0
+j = 14504
 
 D = D0[j:]
 print(D.columns)
@@ -27,6 +27,14 @@ for i in D['Title_url']:
         ft.close
         print(Broken)
         j += 1
+
+        global Availability
+        Availability = 3
+
+        f2 = open("Av.txt", 'a')
+        f2.write(str(Availability) + '_' + str(j) + ',' + '\n')
+        f2.close
+
     else:
         Soup = BeautifulSoup(html, "html.parser")
         Article = Soup.find(id = "content2")
