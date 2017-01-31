@@ -9,7 +9,7 @@ import time
 
 D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-j = 14504
+j = 16521
 
 D = D0[j:]
 print(D.columns)
@@ -21,10 +21,10 @@ for i in D['Title_url']:
     try:
         html = urlopen(Url)
     except:
-        ft = open("broken-new.txt", 'a')
-        Broken = str(j + 1) + '-' + Url + ',' + '\n'
-        ft.write(Broken)
-        ft.close
+        f1 = open("broken-new.txt", 'a')
+        Broken = str(j) + '-' + Url + ',' + '\n'
+        f1.write(Broken)
+        f1.close
         print(Broken)
         j += 1
 
@@ -59,11 +59,20 @@ for i in D['Title_url']:
                 for i in range(1, N+1):
                     Url2 = Url[:(len(Url)-5)] + '-' + str(i) + '.html'
                     print(Url2)
-                    html2 = urlopen(Url2)
-                    Soup2 = BeautifulSoup(html2, "html.parser")
-                    Article = Soup2.find(id = "content2")
-                    Article_page = Article_page + Article.get_text()
-                    time.sleep(1)
+                    try:
+                        html2 = urlopen(Url2)
+                    except:
+                        i += 1
+                        ft2 = open("broken2.txt", 'a')
+                        Broken2 = str(j + 1) + '-' + Url2 + ',' + '\n'
+                        ft2.write(Broken2)
+                        ft2.close
+                        print(Broken2)
+                    else:
+                        Soup2 = BeautifulSoup(html2, "html.parser")
+                        Article = Soup2.find(id = "content2")
+                        Article_page = Article_page + Article.get_text()
+                        time.sleep(1)
         Name = str(Availability) + '-' + str(j+1) + '-' + D0.iloc[j,0] + '.txt'
         f = open(Name, 'w')
         f.write(Article_page)
