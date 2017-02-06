@@ -9,7 +9,8 @@ import time
 
 D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
 
-j = 16521
+# 意外中断时，可以修改 j 的值
+j = 0
 
 D = D0[j:]
 print(D.columns)
