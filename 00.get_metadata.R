@@ -34,17 +34,27 @@ Download <- function(x){
     as.data.frame()
 }
 
-
 # =========================================================================================
-# download "文章点击排行所有"
 
-Aisixiang <- Download("http://www.aisixiang.com/toplist/index.php?id=1&period=all&page=1")
 
-N <- 4965 # 总页数
-Url <- paste0("http://www.aisixiang.com/toplist/index.php?id=1&period=all&page=", 2:N)
-for(i in Url){
-  Aisixiang <- rbind(Aisixiang, Download(i))
-  print(i)
+Get_catalog <- function(x = '7'){
+  ## x 参数表示 http://www.aisixiang.com/toplist/ 中的一天、一周和一月，以及全部，分别为
+  ## ‘1’，‘7’，‘30’，‘all’，默认为一周。 
+  
+  i <- 1
+  Name_date <- paste0(x, '_aisixiang_', Sys.Date(), '.csv')
+  Aisixiang <- Download(paste0('http://www.aisixiang.com/toplist/index.php?id=1&period=', x,
+                               '&page=', i))
+  
+  ## 注意，如果最后一页恰好为 20，那么程序将永远运行下去，鉴于这种概率只有5%，就算了。
+  while(nrow(Aisixiang) == 20 * i){
+    i <- i + 1
+    Url <- paste0('http://www.aisixiang.com/toplist/index.php?id=1&period=', x, '&page=', i)
+    Aisixiang <- rbind(Aisixiang, Download(Url))
+    print(i)
+    Sys.sleep(1)
+  }
+  write.csv(Aisixiang, file = Name_date, row.names = F) # 注意命名
 }
 
-write.csv(Aisixiang, "aisixiang_2016-12-27.csv", row.names = F) # 注意命名
+Get_catalog('all')
