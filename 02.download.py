@@ -6,18 +6,15 @@ from bs4 import BeautifulSoup
 import pandas
 import time
 
-
-D0 = pandas.read_csv("aisixiang_2017-01-20.csv")
+# 读取 00.get_metadata.R 获取的相关目录信息
+D0 = pandas.read_csv("all_aisixiang_2017-05-18_copy.csv")
 
 # 意外中断时，可以修改 j 的值
 j = 0
-
 D = D0[j:]
-print(D.columns)
-print(D['Title_url'])
 
-for i in D['Title_url']:
-    Url = "http://www.aisixiang.com" + i
+for i in D['ID']:
+    Url = "http://www.aisixiang.com/data/" + str(i) + ".html"
     print(Url)
     try:
         html = urlopen(Url)
@@ -40,8 +37,6 @@ for i in D['Title_url']:
         Article = Soup.find(id = "content2")
 
         Article_page = ''
-
-        Availability = 3
 
         if type(Article) == type(None):
             Availability = 0
