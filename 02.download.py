@@ -29,7 +29,6 @@ for i in D['Title_url']:
         print(Broken)
         j += 1
 
-        global Availability
         Availability = 3
 
         f2 = open("Av.txt", 'a')
@@ -45,10 +44,8 @@ for i in D['Title_url']:
         Availability = 3
 
         if type(Article) == type(None):
-            global Availability
             Availability = 0
         else:
-            global Availability
             Availability = 1
             Page = Soup.find(class_ = "list_page")
 
@@ -75,6 +72,7 @@ for i in D['Title_url']:
                         Article_page = Article_page + Article.get_text()
                         time.sleep(1)
         Name = str(Availability) + '-' + str(j+1) + '-' + D0.iloc[j,0] + '.txt'
+        Name = Name.replace('/','')
         f = open(Name, 'w')
         f.write(Article_page)
         f.close()
