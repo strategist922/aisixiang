@@ -5,21 +5,16 @@ Download <- function(x){
   read_html(x) %>% {
     A1 <- html_nodes(., "div.tips a") %>%{
       Title <- html_text(.)
-      Title_url <- html_attr(., "href")
-      cbind(Title, Title_url)
+      ID <- html_attr(., "href") %>%
+        gsub('\\D', '', .)
+      cbind(Title, ID)
     }
     
-    A2 <- html_nodes(., "div.name a") %>%{
-      Author <- html_text(.)
-      Author_url <- html_attr(., "href")
-      cbind(Author, Author_url)
-    }
+    Author <- html_nodes(., "div.name a") %>%
+      html_text()
     
-    A3 <- html_nodes(., "div.ablum_list a") %>%{
-      Ablum <- html_text(.)
-      Ablum_url <- html_attr(., "href")
-      cbind(Ablum, Ablum_url)
-    }
+    Ablum <- html_nodes(., "div.ablum_list a") %>%
+      html_text()
     
     Times <- html_nodes(., "div.times") %>%
       html_text()
@@ -29,7 +24,7 @@ Download <- function(x){
       html_text()
     Click <- Click[2:length(Click)]
     
-    cbind(A1, A2, A3, Times, Click)
+    cbind(A1, Author, Ablum, Times, Click)
     } %>%
     as.data.frame()
 }
@@ -57,4 +52,4 @@ Get_catalog <- function(x = '7'){
   write.csv(Aisixiang, file = Name_date, row.names = F) # 注意命名
 }
 
-Get_catalog('all')
+Get_catalog()
